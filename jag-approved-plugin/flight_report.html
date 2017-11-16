@@ -10,7 +10,7 @@
     <pre id="output" style="border:none;background:white;"></pre>
     <script>
         function flight_report() {
-            var proc = cockpit.spawn(["python", "/usr/share/cockpit/jag-approved-plugin/get_flight_report.py", "/var/lib/mavlink-router", "5"]);
+            var proc = cockpit.spawn(["python", "/usr/share/cockpit/jag-approved-plugin/get_flight_report.py", "/var/lib/mavlink-router", "3"]);
             proc.stream(flight_report_output);
         }
         function flight_report_output(data) {
