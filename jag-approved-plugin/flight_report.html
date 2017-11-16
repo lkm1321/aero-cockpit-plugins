@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>flight_report</title>
+    <link href="../base1/cockpit.css" type="text/css" rel="stylesheet">
+    <script src="../base1/jquery.js"></script>
+    <script src="../base1/cockpit.js"></script>
+</head>
+<body onload="flight_report()">
+
+    <pre id="output" style="border:none;background:white;"></pre>
+    <script>
+        function flight_report() {
+            var proc = cockpit.spawn(["python", "/usr/share/cockpit/jag-approved-plugin/get_flight_report.py", "/var/lib/mavlink-router", "5"]);
+            proc.stream(flight_report_output);
+        }
+        function flight_report_output(data) {
+            output.append(document.createTextNode(data));
+        }
+    </script>
+</body>
+</html>
+

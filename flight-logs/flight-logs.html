@@ -32,7 +32,8 @@
                                                                                             
 		function flightlogs() {                                                             
 	            var proc = cockpit.spawn(["sh", "/usr/share/cockpit/flight-logs/log-dir.sh"]);  
-	            proc.stream(flight_name);                                                       
+	            proc.done( function(data) { console.log(data) } ); 
+		    proc.stream(flight_name);                                                       
                     }                                                                       
                                                                                             
 	        function flight_name(data) {                                                        
@@ -59,7 +60,7 @@
                     var filePath = window.btoa(JSON.stringify({                  
                     payload: "fsread1",                                          
                     binary: "raw",                                               
-                    path: "/var/lib/mavlink-router/logs/" + fileName,                
+                    path: "/var/lib/mavlink-router/" + fileName,                
                     superuser: true,
                     external: {                                                                                                     
                               "content-disposition": 'attachment; filename="' + fileName + '"',

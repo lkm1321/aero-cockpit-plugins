@@ -1,7 +1,7 @@
 DEST ?=
 DATADIR ?= /usr/share/cockpit/
 
-PLUGINS := about software-update
+PLUGINS := about software-update jag-approved-plugin
 
 ifeq ($(V),1)
   Q =
