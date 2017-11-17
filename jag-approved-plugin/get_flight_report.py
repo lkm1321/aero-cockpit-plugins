@@ -6,6 +6,9 @@ import time
 
 import numpy as np
 
+import cProfile
+import re
+
 from pyulog import ULog
 
 def main():
@@ -27,13 +30,13 @@ def main():
 
 		ulog_file_list = os.listdir(args.logs_path)
 		# Filename is of the form <seqnum>-YYYY-MM-DD_HH-MM-SS.ulg. Sort by seqnum
-		ulog_file_list.sort(key = lambda filename: int(filename.split('-')[0])) 
+		ulog_file_list.sort(key = lambda filename: int( filename.split('-')[0] )) 
 		print('Displaying {0} most recent logs.\n\n'.format(str(args.num_recent)))
 		num_recent_san = args.num_recent if args.num_recent is not None else 5
 		num_files = min(len(ulog_file_list), int(num_recent_san)) 
 
-		# Start from the one before. 
-		cur_file_idx = -2
+		# Start from current. 
+		cur_file_idx = -1
 
 		while num_files > 0:
 			ulog_file = ulog_file_list[cur_file_idx]
@@ -44,6 +47,28 @@ def main():
 
 		#	print(num_files)
 			cur_file_idx = cur_file_idx - 1
+
+def test_main(): 
+	ulog_file_list = os.listdir("../../logs")
+	# Filename is of the form <seqnum>-YYYY-MM-DD_HH-MM-SS.ulg. Sort by seqnum
+	ulog_file_list.sort(key = lambda filename: int( filename.split('-')[0] )) 
+	print('Displaying {0} most recent logs.\n\n'.format(str(5)))
+	#num_recent_san = args.num_recent if args.num_recent is not None else 5
+	#num_files = min(len(ulog_file_list), int(num_recent_san)) 
+	num_files = 5
+	# Start from current. 
+	cur_file_idx = -1
+
+	while num_files > 0:
+		ulog_file = ulog_file_list[cur_file_idx]
+
+		# Decrement file count iff it's a valid log. 
+		if get_flight_report('../../logs/'+ ulog_file) is True:
+			num_files = num_files - 1
+
+	#	print(num_files)
+		cur_file_idx = cur_file_idx - 1
+
 
 def get_flight_report(ulog_file):
 
@@ -62,6 +87,7 @@ def get_flight_report(ulog_file):
 		was_armed = np.any(armed_data == 2)
 
 		if not was_armed:
+			del ulog
 			return False
 
 		try: 
@@ -93,6 +119,7 @@ def get_flight_report(ulog_file):
 		print('Arm duration: {0} min {1} sec'.format( str(arm_min), str(arm_sec) ))
 		print('Start voltage: {0}V, End voltage: {1}V'.format(str(batt_v_start), str(batt_v_end)))
 		print('\n\n')
+		del ulog
 		return True
 
 	except IndexError:
@@ -102,6 +129,7 @@ def get_flight_report(ulog_file):
 	# 	print(str(e))
 		return False 
 
-
-
+# test_main()
+# cProfile.run('re.compile("test_main")')
+ 
 main()
