@@ -6,8 +6,8 @@
     <script src="../base1/cockpit.js"></script>
     <script>
         function flight_report() {
-            num_recent = document.getElementById('num_recent'); 
-            var proc = cockpit.spawn(["python", "/usr/share/cockpit/jag-approved-plugin/get_flight_report.py", "/var/lib/mavlink-router", num_recent]);
+	    output.append(document.createTextNode("Checking logs. Hang on..."));
+            var proc = cockpit.spawn(["python", "/usr/share/cockpit/jag-approved-plugin/get_flight_report.py", "/var/lib/mavlink-router", 2]);
             proc.stream(flight_report_output);
         }
         function flight_report_output(data) {
@@ -15,10 +15,7 @@
         }
     </script>
 </head>
-<body>
-    <h2> Number of reports to retrieve: </h2> 
-    <input type="text" id="num_recent"/>
-    <button type="button" onClick="flight_report()">Retrieve</button> 
+<body onload="flight_report()">
     <pre id="output" style="border:none;background:white;"></pre>
 </body>
 </html>
